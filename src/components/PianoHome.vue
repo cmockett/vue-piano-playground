@@ -7,9 +7,10 @@
         />
         <!-- bind attr to obj, pass data DOWN to Piano child -->
         <Controls
-            @arpeggiateChecked="controls.arpeggiateChecked = !controls.arpeggiateChecked;"
-            @majChordChecked="controls.majChordChecked = !controls.majChordChecked;"
-            @minChordChecked="controls.minChordChecked = !controls.minChordChecked;"
+            
+            @arpeggiateChecked="controls.arpeggiateChecked = $event"
+            @majChordChecked="controls.majChordChecked = $event"
+            @minChordChecked="controls.minChordChecked = $event"
         />
         <!-- @event, handle emitted event UP from Controls child component -->
     </div>

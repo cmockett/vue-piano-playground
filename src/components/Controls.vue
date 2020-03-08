@@ -1,11 +1,11 @@
 <template>
     <div class="margin-top-100">
         <label for="arp-checkbox">ARP!</label>
-        <input id="arp-checkbox" type="checkbox" @click="arpeggiateChecked()">
+        <input id="arp-checkbox" type="radio" name="radio-controls" @change="arpeggiateChecked()"><br />
         <label for="maj-chord-checkbox">Maj Chord!</label>
-        <input id="maj-chord-checkbox" type="checkbox" @click="majChordChecked()">
+        <input id="maj-chord-checkbox" type="radio" name="radio-controls" @change="majChordChecked()"><br />
         <label for="min-chord-checkbox">Min Chord!</label>
-        <input id="min-chord-checkbox" type="checkbox" @click="minChordChecked()">
+        <input id="min-chord-checkbox" type="radio" name="radio-controls" @change="minChordChecked()">
     </div>
 </template>
 
@@ -15,18 +15,25 @@ export default {
     name: 'Controls',
     methods: {
         arpeggiateChecked: function () {
-            this.$emit('arpeggiateChecked');
+            this.$emit('arpeggiateChecked', true);
+            this.$emit('majChordChecked', false);
+            this.$emit('minChordChecked', false);
             // emit the event
         },
         majChordChecked: function () {
-            this.$emit('majChordChecked');
+            this.$emit('majChordChecked', true);
+            this.$emit('minChordChecked', false);
+            this.$emit('arpeggiateChecked', false);
             // emit the event
         },
         minChordChecked: function () {
-            this.$emit('minChordChecked');
+            this.$emit('minChordChecked', true);
+            this.$emit('majChordChecked', false);
+            this.$emit('arpeggiateChecked', false);
             // emit the event
         }
-    }
+    },
+    props: ['data']
 }
 </script>
 
