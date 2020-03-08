@@ -7,6 +7,7 @@
 			@mouseup="mouseUp(key, index)"
 			v-bind:class="{ 'white': key.whiteBoolean, 'black': !key.whiteBoolean }" 
 			v-bind:style="[key.whiteBoolean ? {'grid-column':  (key.id * 3 - 2) +'/' + ' span 3'} : {'grid-column': (key.id * 3 - 2) +'/' + ' span 3'}]"
+			v-bind:id="key.id + '-audio'"
 		>
 			<span>{{key.label}}</span>
 		</li>
@@ -107,33 +108,43 @@ export default {
 		},
 		playSample: function(key){
 			key.sample.play();
+			document.getElementById(key.id + '-audio').style.backgroundColor = "#90EE90";
 		},
 		stopSample: function(key){
-			console.log('stop');
 			key.sample.pause();
 			key.sample.load();
+			document.getElementById(key.id + '-audio').style.backgroundColor = key.whiteBoolean ? "initial" : "#000";
 		},
 		arpSample: function(key1, key2, key3){
 			key1.sample.play();
+			document.getElementById(key1.id + '-audio').style.backgroundColor = "#90EE90";
 			setTimeout(function(){
 				key2.sample.play();
+				document.getElementById(key2.id + '-audio').style.backgroundColor = "#90EE90";
 			}, 250);
 			setTimeout(function(){
 				key3.sample.play();
+				document.getElementById(key3.id + '-audio').style.backgroundColor = "#90EE90";
 			}, 500);
 		},
 		arpStopSample: function(key1, key2, key3){
 			key1.sample.pause();
 			key1.sample.load();
+			document.getElementById(key1.id + '-audio').style.backgroundColor = key1.whiteBoolean ? "initial" : "#000";
 			key2.sample.pause();
 			key2.sample.load();
+			document.getElementById(key2.id + '-audio').style.backgroundColor = key2.whiteBoolean ? "initial" : "#000";
 			key3.sample.pause();
 			key3.sample.load();
+			document.getElementById(key3.id + '-audio').style.backgroundColor = key3.whiteBoolean ? "initial" : "#000";
 		},
 		ChordSample: function(key1, key2, key3){
 			key1.sample.play();
+			document.getElementById(key1.id + '-audio').style.backgroundColor = "#90EE90";
 			key2.sample.play();
+			document.getElementById(key2.id + '-audio').style.backgroundColor = "#90EE90";
 			key3.sample.play();
+			document.getElementById(key3.id + '-audio').style.backgroundColor = "#90EE90";
 		},
 	},
 }
