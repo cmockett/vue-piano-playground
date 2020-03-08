@@ -1,5 +1,5 @@
 <template>
-    <div class="keyboard" style="--keys:38; --octaves:7;">
+    <div class="keyboard" style="--keys:50; --octaves:7;">
         <Note 
             :arpeggiateChecked="this.arpeggiateChecked"
             :majChordChecked="this.majChordChecked"
@@ -33,7 +33,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     .keyboard{
-        width: 100vw;
+        width: 99vw;
         height: calc(260px - var(--octaves)*10px);
         /*overflow-x: hidden;*/
     }
