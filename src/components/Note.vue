@@ -20,7 +20,9 @@ export default {
     props: [
         "arpeggiateChecked",
         "majChordChecked",
-        "minChordChecked"
+        "minChordChecked",
+        "customNotes",
+        "customNotesArpSpeed"
     ],
     // set up props to grab data from parent
     data: function() {
@@ -85,37 +87,29 @@ export default {
 					this.audioArray[index+3], 
 					this.audioArray[index+7]
 				) 
+			} else if (this.customNotes.length) {
+				this.customArpSample(key, index, this.customNotes)
 			}else{
 				this.playSample(key)
 			}
 		},
-		mouseUp: function(key, index){
-			if(this.arpeggiateChecked || this.majChordChecked){
-				this.arpStopSample(
-					this.audioArray[index], 
-					this.audioArray[index+4], 
-					this.audioArray[index+7]
-				) 
-			}else if(this.minChordChecked){
-				this.arpStopSample(
-					this.audioArray[index], 
-					this.audioArray[index+3], 
-					this.audioArray[index+7]
-				) 
-			}else{
-				this.stopSample(key)
-			}
+		mouseUp: function(){
+			this.stopSample()
 		},
 		playSample: function(key){
 			key.sample.play();
 			document.getElementById(key.id + '-audio').style.backgroundColor = "#90EE90";
 		},
-		stopSample: function(key){
-			key.sample.pause();
-			key.sample.load();
-			document.getElementById(key.id + '-audio').style.backgroundColor = key.whiteBoolean ? "initial" : "#000";
+		stopSample: function(){
+			//loop through the whole shebang and turn em all off
+			for (var i = 0; i < this.audioArray.length; i++) {
+				this.audioArray[i].sample.pause();
+				this.audioArray[i].sample.load();
+				document.getElementById(this.audioArray[i].id + '-audio').style.backgroundColor = this.audioArray[i].whiteBoolean ? "initial" : "#000";
+			}
 		},
 		arpSample: function(key1, key2, key3){
+			//simple major chord arp
 			key1.sample.play();
 			document.getElementById(key1.id + '-audio').style.backgroundColor = "#90EE90";
 			setTimeout(function(){
@@ -127,18 +121,8 @@ export default {
 				document.getElementById(key3.id + '-audio').style.backgroundColor = "#90EE90";
 			}, 500);
 		},
-		arpStopSample: function(key1, key2, key3){
-			key1.sample.pause();
-			key1.sample.load();
-			document.getElementById(key1.id + '-audio').style.backgroundColor = key1.whiteBoolean ? "initial" : "#000";
-			key2.sample.pause();
-			key2.sample.load();
-			document.getElementById(key2.id + '-audio').style.backgroundColor = key2.whiteBoolean ? "initial" : "#000";
-			key3.sample.pause();
-			key3.sample.load();
-			document.getElementById(key3.id + '-audio').style.backgroundColor = key3.whiteBoolean ? "initial" : "#000";
-		},
 		ChordSample: function(key1, key2, key3){
+			//three note chord
 			key1.sample.play();
 			document.getElementById(key1.id + '-audio').style.backgroundColor = "#90EE90";
 			key2.sample.play();
@@ -146,6 +130,49 @@ export default {
 			key3.sample.play();
 			document.getElementById(key3.id + '-audio').style.backgroundColor = "#90EE90";
 		},
+		customArpSample: function(key1, index, customNotes){
+			var offset = 0;
+
+			//handling types, setting up arrays
+			var cusNoteStringsasArr = (""+customNotes).split(",");
+			var cusNoteNumsasArr = cusNoteStringsasArr.map(Number);
+			var indexasNum = parseInt(index);
+			var arpSpeedasNum = parseInt(this.customNotesArpSpeed);
+
+			//set the speed
+			offset += arpSpeedasNum;
+
+			//play first note
+			key1.sample.play();
+			document.getElementById(key1.id + '-audio').style.backgroundColor = "#90EE90";
+
+			//loop through array of intervals
+			for (var i = 0; i <= cusNoteNumsasArr.length - 1; i++) {
+				var j = cusNoteNumsasArr[i] + indexasNum;
+
+				//tell setDelay when to play the notes
+				this.setDelay(j, offset);
+				offset += arpSpeedasNum;
+			}
+		},
+		setDelay: function(i, offset){
+			//use self in setTimeout with Vue
+			let self = this;
+			setTimeout(function () {
+				// play the notes
+				if(!self.audioArray[i].sample.paused){
+					self.audioArray[i].sample.pause();
+					self.audioArray[i].sample.load();
+					self.audioArray[i].sample.play();
+				} else {
+					self.audioArray[i].sample.play();
+
+				}
+				document.getElementById(self.audioArray[i].id + '-audio').style.backgroundColor = "#90EE90";
+
+			//offset handles when the notes play
+			}, offset);
+		}
 	},
 }
 </script>

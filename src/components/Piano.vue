@@ -4,6 +4,8 @@
             :arpeggiateChecked="this.arpeggiateChecked"
             :majChordChecked="this.majChordChecked"
             :minChordChecked="this.minChordChecked"
+            :customNotes="this.customNotes"
+            :customNotesArpSpeed="this.customNotesArpSpeed"
         />
         <!-- bind attr to props(?), pass data DOWN to Note child -->
     </div>
@@ -17,7 +19,9 @@ export default {
     props: [
         "arpeggiateChecked",
         "majChordChecked",
-        "minChordChecked"
+        "minChordChecked",
+        "customNotes",
+        "customNotesArpSpeed"
     ],
     // set up props to grab data from parent
     components:{
